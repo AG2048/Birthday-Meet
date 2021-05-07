@@ -369,11 +369,19 @@ def explore():
                     if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session["user_id"], receiver_id)) == 0:
                         # if receiver has already sent you a request
                         if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session["user_id"])) > 0:
-                            # add this relationship to friend list
+                            # add this relationship to friend list, remove that request from list
                             db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session["user_id"], receiver_id)
+                            db.execute("DELETE FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session["user_id"])
                             return redirect("/explore")
                         else:
-
+                            # Get message and add a default if not specified
+                            message = request.form.get("message")
+                            if not message:
+                                message = "Hello, I would like to add you as my friend!"
+                            # Keep track of when is this request sent
+                            now = datetime.now().strftime("%Y-%m-%d")
+                            db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session["user_id"], receiver_id, message, now)
+                            return redirect("/explore")
                     else:
                         error = "You have already sent a request"
                 else:
