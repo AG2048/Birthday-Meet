@@ -213,8 +213,8 @@ def login():
             # Give session and redirect
             if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], request.form.get("password")):
                 session["user_id"] = user_info_of_username[0]["id"]
+                # TODO: add flash message
                 return redirect("/")
-
         # If failed any of the requirements (filled in correct username and pass), generate error message and render template like a get request
         error = "Incorrect username or password"
 
@@ -226,6 +226,7 @@ def login():
 def logout():
     """Log user out by clearing session"""
     session.clear()
+    # TODO: add flash message
     return redirect("/")
 
 
@@ -292,7 +293,7 @@ def register():
                                 db.execute("INSERT INTO users (username, hash, month, day) VALUES (?, ?, ?, ?)", username, generate_password_hash(request.form.get("password")), month, day)
                                 # Auto login user
                                 session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
-
+                                # TODO: add flash message
                                 return redirect("/")
                             else:
                                 birthday_error = "Invalid birthday"
@@ -353,8 +354,8 @@ def explore():
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
         # Verify if receiver_id exixts AND is not user himself
-        if receiver_id and receiver_id != session["user_id"]:
-            user_info = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])[0]
+        if receiver_id and receiver_id != session.get("user_id"):
+            user_info = db.execute("SELECT * FROM users WHERE id = ?", session.get("user_id"))[0]
             receiver_info = db.execute("SELECT * FROM users WHERE id = ?", receiver_id)[0]
 
             user_birth_month = user_info["month"]
@@ -364,14 +365,15 @@ def explore():
             # Verify if it is a "possible friend"
             if user_birth_month == receiver_birth_month and user_birth_day = receiver_birth_day:
                 # Verify if the receiving user is not already a friend
-                if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session["user_id"], receiver_id, receiver_id, session["user_id"])) == 0:
+                if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), receiver_id, receiver_id, session.get("user_id"))) == 0:
                     # Verify if receiving user already being sent a friend request
-                    if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session["user_id"], receiver_id)) == 0:
+                    if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session.get("user_id"), receiver_id)) == 0:
                         # if receiver has already sent you a request
-                        if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session["user_id"])) > 0:
+                        if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session.get("user_id"))) > 0:
                             # add this relationship to friend list, remove that request from list
-                            db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session["user_id"], receiver_id)
-                            db.execute("DELETE FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session["user_id"])
+                            db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), receiver_id)
+                            db.execute("DELETE FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session.get("user_id"))
+                            # TODO: add flash message
                             return redirect("/explore")
                         else:
                             # Get message and add a default if not specified
@@ -380,7 +382,8 @@ def explore():
                                 message = "Hello, I would like to add you as my friend!"
                             # Keep track of when is this request sent
                             now = datetime.now().strftime("%Y-%m-%d")
-                            db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session["user_id"], receiver_id, message, now)
+                            db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session.get("user_id"), receiver_id, message, now)
+                            # TODO: add flash message
                             return redirect("/explore")
                     else:
                         error = "You have already sent a request"
