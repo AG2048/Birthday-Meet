@@ -230,7 +230,7 @@ def logout():
     return redirect("/")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     """Clear all session info, register user
 
@@ -312,7 +312,7 @@ def register():
     return render_template("register.html", username_error=username_error, password_error=password_error, confirm_error=confirm_error, birthday_error=birthday_error)
 
 
-@app.route("/explore")
+@app.route("/explore", methods=["GET", "POST"])
 @login_required
 def explore():
     """Display a page with all potential friends
@@ -417,7 +417,7 @@ def explore():
     return render_template("explore.html", error=error, list_of_potential_friends=list_of_potential_friends)
 
 
-@app.route("/requests")
+@app.route("/requests", methods=["GET", "POST"])
 @login_required
 def requests():
     """Display a page of all friend requests directed at user
