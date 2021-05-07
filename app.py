@@ -355,7 +355,7 @@ def explore():
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
         # Verify if receiver_id exixts AND is not user himself
-        if receiver_id and receiver_id != session.get("user_id"):
+        if receiver_id and receiver_id != session.get("user_id") and len(db.execute("SELECT * FROM users WHERE id = ?", receiver_id)) == 1:
             user_info = db.execute("SELECT * FROM users WHERE id = ?", session.get("user_id"))[0]
             receiver_info = db.execute("SELECT * FROM users WHERE id = ?", receiver_id)[0]
 
@@ -387,12 +387,16 @@ def explore():
                             # TODO: add flash message
                             return redirect("/explore")
                     else:
+                        # User have already sent a request to receiver
                         error = "You have already sent a request"
                 else:
+                    # User and receiver are already linked in friends list
                     error = "User is already a friend"
             else:
+                # User does not have same birthday as receiver
                 error = "Invalid friend request"
         else:
+            # receiver_id doesnt exist, receiver is user him/herself, or receiver doesn't exist in users list
             error = "Invalid friend request"
 
     list_of_potential_friends = []
