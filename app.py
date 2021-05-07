@@ -197,4 +197,11 @@ def requests():
 @app.route("/messages")
 @login_required
 def messages():
-    """Display a page full of ALL messages (new ones first)
+    """Display a page full of ALL messages (new ones first) (html file includes the message content, sender and message id)
+    POST request is to set a message as 'read' from unread (you cant set read to unread)
+        check if the message id you are trying to set as read is actually directed to you
+        if not don't redirect, jump to end and render again
+        if yes, mark as read, change to db, then simply redirect back to messages
+    
+    GET request displays all messages, including sender, send time, read/unread... if it's unread, include a button to set it as read.
+    """
