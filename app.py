@@ -79,12 +79,14 @@ CREATE TABLE messages (
         receiver_id INTEGER NOT NULL,
         message_text TEXT NOT NULL,
         when_sent DATE NOT NULL,
-        is_read BOOL NOT NULL,
+        is_read BIT NOT NULL,
         FOREIGN KEY (sender_id) REFERENCES users (id),
         FOREIGN KEY (receiver_id) REFERENCES users (id),
         PRIMARY KEY(id)
     );
 """
+
+MONTHS = [None,"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
 @app.after_request
 def after_request(response):
@@ -132,8 +134,32 @@ def index():
         # Scenario where user is not logged in
         return render_template("index.html")
     else:
-        # User is logged in, display overview.html
-        # TODO
+        user_info = db.execute("SELECT * FROM users WHERE id = ?", session.get("user_id"))[0]
+        user_id = user_info["id"]
+        username = user_info["username"]
+        birth_month = int(user_info["month"])
+        birth_day = user_info["day"]
+        birth_month_name = MONTHS[birth_month]
+
+        # Count number of requests from db where receiver is user
+        number_of_requests = len(db.execute("SELECT * FROM requests WHERE receiver_id = ?", user_id))
+
+        # Count number of messages from db where receiver is user AND is_read is false
+        number_of_unread_messages = len(db.execute("SELECT * FROM messages WHERE receiver_id = ? AND is_read = 0", user_id))
+
+        # Potential friend is: id not user_id, month and day match, id not user_1 when user is user_2, id not user_2 when user is user_1, id not in requests where user's the sender
+        number_of_potential_friends = len(db.execute("SELECT * FROM users WHERE id != ? AND month = ? AND day = ? AND id NOT IN (SELECT user_1_id FROM friends WHERE user_2_id = ?) AND id NOT IN (SELECT user_2_id FROM friends WHERE user_1_id = ?) AND id NOT IN (SELECT receiver_id FROM requests WHERE sender_id = ?)",
+                                                     user_id, birth_month, birth_day, user_id, user_id, user_id))
+
+        # Render the template with all necessary info to display in overview.html
+        return render_template("overview.html",
+                                username=username,
+                                birth_month=birth_month,
+                                birth_month_name = birth_month_name,
+                                birth_day=birth_day,
+                                number_of_requests=number_of_requests,
+                                number_of_unread_messages=number_of_unread_messages,
+                                number_of_potential_friends=number_of_potential_friends)
 
 
 @app.route("/login", methods=["GET", "POST"])
