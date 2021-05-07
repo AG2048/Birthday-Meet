@@ -302,7 +302,7 @@ def register():
                     else:
                         confirm_error = "Passwords do not match"
                 else:
-                    password_error = "Invalid password"
+                    password_error = "Password need to be 8 characters long"
             else:
                 username_error = "Username already taken"
         else:
@@ -440,6 +440,13 @@ def requests():
     Same thing with error messages,
         always render template with error, just that error is usually None
         if there's error, display at top of page.
+    HTML:
+        receive:
+            error,
+            list of all requests
+        posts:
+            request_id
+            accept or not
     """
     # TODO
 
