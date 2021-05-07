@@ -446,9 +446,9 @@ def requests():
         always render template with error, just that error is usually None
         if there's error, display at top of page.
     HTML:
-        receive:
+        get:
             error,
-            list of all requests (where receiver is user, include message, sender username, date sent, id of the request)
+            list_of_all_requests (where receiver is user, include message, sender username, date sent, id of the request)
         posts:
             request_id
             accept or not (accepts: true or false)
@@ -483,6 +483,9 @@ def requests():
         else:
             # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
             error = "Invalid information"
+
+    list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
+    return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
     # TODO
 
 
