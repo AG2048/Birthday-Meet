@@ -132,6 +132,15 @@ def index():
             number of requests
             number of unread messages
             number of potential friends
+    HTML:
+        overview.html will be receiving:
+        username
+        birth_month,
+        birth_month_name,
+        birth_day,
+        number_of_requests,
+        number_of_unread_messages,
+        number_of_potential_friends
     """
     if session.get("user_id") is None:
         # Scenario where user is not logged in
@@ -181,6 +190,12 @@ def login():
         error messages are displayed AT where error occurs
     Only success login redirects to "/"
         GET requests/error POST renders same template
+    HTML:
+        login.html will post:
+            username
+            password
+        login.html can receive:
+            error
     """
     # Make sure no error message pops out by default, log out user automatically
     error = None
@@ -232,6 +247,18 @@ def register():
         error messages are displayed AT where error occurs
     Only success login redirects to "/", along with a flash message "You have successfully registered"
         GET requests/error POST renders same template
+    HTML:
+        register.html will post:
+            username
+            password
+            confirm
+            month
+            day
+        can receive:
+            username_error
+            password_error
+            confirm_error
+            birthday_error
     """
     # Make sure no error message pops out by default, log out user automatically
     username_error = None
