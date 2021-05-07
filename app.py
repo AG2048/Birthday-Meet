@@ -191,7 +191,7 @@ def login():
         username = request.form.get("username")
 
         # Only proceed if both fields are filled out
-        if (username and request.form.get("password")):
+        if username and request.form.get("password"):
             user_info_of_username = db.execute("SELECT * FROM users WHERE username = ?", username)
 
             # Only proceed if username exists AND password is correct.
@@ -233,6 +233,55 @@ def register():
     Only success login redirects to "/", along with a flash message "You have successfully registered"
         GET requests/error POST renders same template
     """
+    # Make sure no error message pops out by default, log out user automatically
+    username_error = None
+    password_error = None
+    confirm_error = None
+    birthday_error = None
+    session.clear()
+
+    # Receiving from form in login.html
+    if request.method == "POST":
+        username = request.form.get("username")
+
+        # Proceed if username is entered
+        if username:
+            # Proceed if username does not exist in db
+            if len(db.execute("SELECT * FROM users WHERE username = ?", username)) == 0:
+                # Proceed if length of password is at least 8 characters
+                if request.form.get("password") and len(request.form.get("username")) >= 8:
+                    # Proceed if user entered same password twice
+                    if request.form.get("password") == request.form.get("confirm"):
+                        # At this point, username and password are all correct
+                        month = request.form.get("month")
+                        day = request.form.get("day")
+                        # Proceed if both value are numeric
+                        if month.isnumeric() and day.isnumeric() and 1 <= int(month) <= 12:
+                            month = int(month)
+                            day = int(day)
+                            # Proceed if month and day match
+                            if (month in [1, 3, 5, 7, 8, 10, 12] and 1 <= day <= 31) or (month in [4, 6, 9, 11] and 1 <= day <= 30) or (month == 2 and 1 <= day <= 29):
+                                # Insert new user data into db
+                                db.execute("INSERT INTO users (username, hash, month, day) VALUES (?, ?, ?, ?)", username, generate_password_hash(request.form.get("password")), month, day)
+                                # Auto login user
+                                session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
+
+                                redirect("/")
+                            else:
+                                birthday_error = "Invalid birthday"
+                        else:
+                            birthday_error = "Invalid birthday"
+                    else:
+                        confirm_error = "Passwords do not match"
+                else:
+                    password_error = "Invalid password"
+            else:
+                username_error = "Username already taken"
+        else:
+            username_error = "Invalid username"
+
+    # Render login.html, and pass error message (if there is any)
+    return render_template("register.html", username_error=username_error, password_error=password_error, confirm_error=confirm_error, birthday_error=birthday_error)
     # TODO:
 
 
