@@ -213,7 +213,7 @@ def login():
             # Give session and redirect
             if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], request.form.get("password")):
                 session["user_id"] = user_info_of_username[0]["id"]
-                redirect("/")
+                return redirect("/")
 
         # If failed any of the requirements (filled in correct username and pass), generate error message and render template like a get request
         error = "Incorrect username or password"
@@ -226,7 +226,7 @@ def login():
 def logout():
     """Log user out by clearing session"""
     session.clear()
-    redirect("/")
+    return redirect("/")
 
 
 @app.route("/register")
@@ -293,7 +293,7 @@ def register():
                                 # Auto login user
                                 session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
 
-                                redirect("/")
+                                return redirect("/")
                             else:
                                 birthday_error = "Invalid birthday"
                         else:
@@ -341,7 +341,47 @@ def explore():
     flash will display GREEN text on top of page
     Only success redirects to "/explore"
         GET requests/error POST renders same template
+    HTML:
+        explore.html will post:
+            receiver_id
+            request_message (can be blank)
+        can receive:
+            error
     """
+    error = None
+
+    if request.method == "POST":
+        receiver_id = request.form.get("receiver_id")
+        # Verify if receiver_id exixts AND is not user himself
+        if receiver_id and receiver_id != session["user_id"]:
+            user_info = db.execute("SELECT * FROM users WHERE id = ?", session["user_id"])[0]
+            receiver_info = db.execute("SELECT * FROM users WHERE id = ?", receiver_id)[0]
+
+            user_birth_month = user_info["month"]
+            user_birth_day = user_info["day"]
+            receiver_birth_month = receiver_info["month"]
+            receiver_birth_day = receiver_info["day"]
+            # Verify if it is a "possible friend"
+            if user_birth_month == receiver_birth_month and user_birth_day = receiver_birth_day:
+                # Verify if the receiving user is not already a friend
+                if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session["user_id"], receiver_id, receiver_id, session["user_id"])) == 0:
+                    # Verify if receiving user already being sent a friend request
+                    if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session["user_id"], receiver_id)) == 0:
+                        # if receiver has already sent you a request
+                        if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session["user_id"])) > 0:
+                            # add this relationship to friend list
+                            db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session["user_id"], receiver_id)
+                            return redirect("/explore")
+                        else:
+
+                    else:
+                        error = "You have already sent a request"
+                else:
+                    error = "User is already a friend"
+            else:
+                error = "Invalid friend request"
+        else:
+            error = "Invalid friend request"
     # TODO
 
 
