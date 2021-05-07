@@ -369,7 +369,7 @@ def explore():
                 if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), receiver_id, receiver_id, session.get("user_id"))) == 0:
                     # Verify if receiving user already being sent a friend request
                     if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session.get("user_id"), receiver_id)) == 0:
-                        # if receiver has already sent you a request
+                        # if receiver has already sent to user a request
                         if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session.get("user_id"))) > 0:
                             # add this relationship to friend list, remove that request from list
                             db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), receiver_id)
@@ -377,6 +377,7 @@ def explore():
                             # TODO: add flash message
                             return redirect("/explore")
                         else:
+                            # User are the first to send a request
                             # Get message and add a default if not specified
                             message = request.form.get("message")
                             if not message:
@@ -447,11 +448,41 @@ def requests():
     HTML:
         receive:
             error,
-            list of all requests
+            list of all requests (where receiver is user, include message, sender username, date sent, id of the request)
         posts:
             request_id
-            accept or not
+            accept or not (accepts: true or false)
     """
+    error = None
+    if request.method == "POST":
+        request_id = request.form.get("request_id")
+        accepts = request.form.get("accepts")
+        # Verify request_id and accepts are entered
+        if request_id and accepts:
+            request_info = db.execute("SELECT * FROM requests WHERE id = ?", request_id)
+            # Check if this request_id actually refers to a request
+            if len(request_info) == 1:
+                # Make sure this request is for user
+                if request_info["receiver_id"] == session.get("user_id"):
+                    sender_id = request_info["sender_id"]
+                    db.execute("DELETE FROM requests WHERE id = ?", request_id)
+                    if accepts == "true":
+                        db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), sender_id)
+                        # TODO: flash
+                        return redirect("/requests")
+                    else:
+                        # user is ignoring this request
+                        # TODO: flash
+                        return redirect("/requests")
+                else:
+                    # this request is not directed at user
+                    error = "Invalid friend request"
+            else:
+                # request doesn't exist in requests table
+                error = "Invalid friend request"
+        else:
+            # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
+            error = "Invalid information"
     # TODO
 
 
