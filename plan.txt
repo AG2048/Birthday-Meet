@@ -1,0 +1,113 @@
+in this project, my goal is to create a website that have some form of functionalities of a social media
+
+the key is to "communicate" with people that shares the same birthdays with you.
+
+
+
+Lets call this BIRTHDAY MEET
+
+
+user experience:
+    see homepage (visible by everyone) logged in or not
+
+    On navbar, you can see followings:
+        Explore
+            list of all people in the database with same birthday that is not your friend yet
+        requests
+            list of all "friend requests"
+        messages
+            received messages (default display)
+                list of messages people sent to you. Read messages are being labled (read/unread)
+            sent messages (have to click button within the messages page)
+                list of all messages you sent
+            send messages (click button within messages page)
+                have a selection menu of everyone's username in ur friend_list
+
+
+    Database:
+        users
+            id
+            username
+            password hash
+            birthday
+
+        friend_requests
+            id
+            sender_id
+            receiver_id
+            request_message
+            datetime
+
+        friends
+            user_1_id
+            user_2_id
+
+        messages
+            id
+            sender_id
+            receiver_id
+            message
+            datetime
+            is_read
+
+    /
+        display homepage
+    /login
+        log in using username and pass, verify pass with hash
+    /register
+        register with certain username, username can't repeat
+        if repeated username, return same page with get request and display "username taken"
+        if password too short, return same page with get request and display "password must have certain letters..."
+        if password don't match, return same page with get request and display "password don't match"
+
+        for birthday, use selections. months and date. Jan to Dec, 01 to 31. If there's invalid month, redirect to same page but display this error message "invalid date"
+
+        if possible, we can use jquery to continuously check if username is already taken.
+    /explore
+        if possible friend number is 0:
+            no new user with your birthday, check again later :) or check your request list to see if someone already sent u a request!
+        have a select menu, and send post request back to /explore. Add this to friend_request list
+        also allow user to send a message along the request
+        (WITH THE REQUEST MESSAGE. THE MESSAGE IS SUPPOSED TO BE SHORT, LESS THAN 100 CHARACTER)
+
+        Note if the requested friend doesn't have same birthday, redirect back to same page and display "invalid username"
+        or if requested friend's username is wrong
+
+        then redirect back to same page, DO NOT DISPLAY PEOPLE ALREADY FRIEND, or if both user's name and the potential friend's name
+        are in the request list, don't display
+    /requests
+        display a table of friend requests. (WITH THE REQUEST MESSAGE. THE MESSAGE IS SUPPOSED TO BE SHORT, LESS THAN 100 CHARACTER)
+        each table row uses a submit button (redirects back to /requests using post). click to accept, or click to deny
+            return username of receiver (or id) from html, and whether it's accept or deny
+        for receiving post requests, check if the person IS ACTUALLY requesting
+            if not, return to same page: error, invalid request
+        else,
+            add this user to friends table
+            REMOVE THIS REQUEST FROM requests table (so if one account's on multiple devices, it won't appear twice)
+        everytime after doing the post request, redirect back to /requests
+        if no request, display: you have no requests right now
+    /messages
+        display 2 buttons on top right (send messages / view sent messages) (each redirects to /send or /sent)
+        in the middle, make it display all messgaed directed to user like:
+            (READ/UNREAD) On DATETIME, Username Sent: (this row has light blue background)
+                messages
+                messages_line 2
+                messages_line 3
+                (these rows only have blank background)
+            (mark as read (only display this if it's unread))
+        display all messgaes from the database directed to this user.
+    /send
+        selection menu to select from friend list who you are sending to
+
+        include the messages you can type in a input box (find a way to let user type paragraphs)
+
+        in receiving post request, be sure to verify that the message you are sending is to someone in friendlist. DON"T SEND IT if it's wrong.
+            redirect back to page, and display: invalid receiver
+    /sent
+        display all your sent messages just like in /messages
+            On DATETIME, to USERNAME you sent: (this row has light blue background)
+                messages
+                messages_line 2
+                messages_line 3
+                (these rows only have blank background)
+        if no message sent: you havent sent any message yet!
