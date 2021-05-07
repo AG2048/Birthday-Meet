@@ -189,15 +189,14 @@ def login():
     # Receiving from form in login.html
     if request.method == "POST":
         username = request.form.get("username")
-        password = request.form.get("password")
 
         # Only proceed if both fields are filled out
-        if (username and password):
+        if (username and request.form.get("password")):
             user_info_of_username = db.execute("SELECT * FROM users WHERE username = ?", username)
 
             # Only proceed if username exists AND password is correct.
             # Give session and redirect
-            if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], password):
+            if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], request.form.get("password")):
                 session["user_id"] = user_info_of_username[0]["id"]
                 redirect("/")
 
