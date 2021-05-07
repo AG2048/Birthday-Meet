@@ -282,7 +282,6 @@ def register():
 
     # Render login.html, and pass error message (if there is any)
     return render_template("register.html", username_error=username_error, password_error=password_error, confirm_error=confirm_error, birthday_error=birthday_error)
-    # TODO:
 
 
 @app.route("/explore")
