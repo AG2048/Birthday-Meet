@@ -40,7 +40,50 @@ app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
 """Access database"""
-db = SQL("sqlite:///birthdaymeet.db")
+db = SQL("sqlite:///birthday-meet.db")
+"""Database info:
+
+CREATE TABLE users (
+        id INTEGER,
+        username TEXT NOT NULL,
+        hash TEXT NOT NULL,
+        month INTEGER NOT NULL,
+        day INTEGER NOT NULL,
+        PRIMARY KEY(id)
+    );
+
+CREATE UNIQUE INDEX username ON users (username);
+
+CREATE TABLE requests (
+        id INTEGER,
+        sender_id INTEGER NOT NULL,
+        receiver_id INTEGER NOT NULL,
+        request_message TEXT NOT NULL,
+        when_sent DATE NOT NULL,
+        FOREIGN KEY (sender_id) REFERENCES users (id),
+        FOREIGN KEY (receiver_id) REFERENCES users (id),
+        PRIMARY KEY(id)
+    );
+
+CREATE TABLE friends (
+        user_1_id INTEGER NOT NULL,
+        user_2_id INTEGER NOT NULL,
+        FOREIGN KEY (user_1_id) REFERENCES users (id),
+        FOREIGN KEY (user_2_id) REFERENCES users (id)
+    );
+
+CREATE TABLE messages (
+        id INTEGER,
+        sender_id INTEGER NOT NULL,
+        receiver_id INTEGER NOT NULL,
+        message_text TEXT NOT NULL,
+        when_sent DATE NOT NULL,
+        is_read BOOL NOT NULL,
+        FOREIGN KEY (sender_id) REFERENCES users (id),
+        FOREIGN KEY (receiver_id) REFERENCES users (id),
+        PRIMARY KEY(id)
+    );
+"""
 
 @app.after_request
 def after_request(response):
