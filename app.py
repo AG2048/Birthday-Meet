@@ -348,6 +348,7 @@ def explore():
             request_message (can be blank)
         can receive:
             list_of_potential_friends (a dict of user's username AND id) (in html first check if it's empty) (can access data with dot notation or square bracket: dict.value or dict["value"])
+                if list is empty display diff messages
             error
     """
     error = None
@@ -449,6 +450,7 @@ def requests():
         get:
             error,
             list_of_all_requests (where receiver is user, include message, sender username, date sent, id of the request)
+                if list is empty, display separate message
         posts:
             request_id
             accept or not (accepts: true or false)
