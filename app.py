@@ -23,6 +23,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from datetime import datetime
 from functools import wraps
 
+
 """Initiate app"""
 app = Flask(__name__)
 
@@ -95,6 +96,7 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
+
 def login_required(f):
     """This function detects if there is a "session" for user
     acts as a function decorator: @login_required
@@ -110,6 +112,7 @@ def login_required(f):
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
+
 
 @app.route("/")
 def index():
@@ -132,6 +135,7 @@ def index():
         # User is logged in, display overview.html
         # TODO
 
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Clear all session info, log user in
@@ -151,11 +155,13 @@ def login():
     """
     # TODO:
 
+
 @app.route("/logout")
 def logout():
     """Log user out by clearing session"""
     session.clear()
     redirect("/")
+
 
 @app.route("/register")
 def register():
@@ -177,6 +183,7 @@ def register():
         GET requests/error POST renders same template
     """
     # TODO:
+
 
 @app.route("/explore")
 @login_required
@@ -211,6 +218,7 @@ def explore():
     """
     # TODO
 
+
 @app.route("/requests")
 @login_required
 def requests():
@@ -237,6 +245,7 @@ def requests():
     """
     # TODO
 
+
 @app.route("/messages")
 @login_required
 def messages():
@@ -249,6 +258,5 @@ def messages():
 
     GET request displays all messages, including sender, send time, read/unread... if it's unread, include a button to set it as read.
     """
-
-
     # TODO
+
