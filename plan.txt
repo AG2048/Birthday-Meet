@@ -9,7 +9,7 @@ Lets call this BIRTHDAY MEET yay
 
 
 user experience:
-    see homepage (visible by everyone) logged in or not
+    see homepage (visible by everyone) logged in or not...
 
     On navbar, you can see followings:
         Explore
