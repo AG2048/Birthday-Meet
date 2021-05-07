@@ -268,7 +268,7 @@ def register():
     birthday_error = None
     session.clear()
 
-    # Receiving from form in login.html
+    # Receiving from form in register.html
     if request.method == "POST":
         username = request.form.get("username")
 
@@ -347,6 +347,7 @@ def explore():
             receiver_id
             request_message (can be blank)
         can receive:
+            list_of_potential_friends (a dict of user's username AND id) (in html first check if it's empty) (can access data with dot notation or square bracket: dict.value or dict["value"])
             error
     """
     error = None
@@ -393,7 +394,27 @@ def explore():
                 error = "Invalid friend request"
         else:
             error = "Invalid friend request"
-    # TODO
+
+    list_of_potential_friends = []
+    current_user_info = db.execute("SELECT * FROM users WHERE id = ?", session.get("user_id"))[0]
+    month = current_user_info["month"]
+    day = current_user_info["day"]
+    # Get list of users where same birthday and not user himself/herself
+    list_of_users_with_same_birthday = db.execute("SELECT * FROM users WHERE month = ? AND day = ? AND id != ?", month, day, session.get("user_id"))
+    # Loop thru all users and find potential friend
+    for user_with_same_birthday in list_of_users_with_same_birthday:
+        if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session.get("user_id"), user_with_same_birthday.get("id"))) != 0:
+            # User have already sent this person a request
+            continue
+        if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), user_with_same_birthday.get("id"), user_with_same_birthday.get("id"), session.get("user_id"))) == 0:
+            # User already friend with this person
+            continue
+        # This is a potential friend, add to list
+        list_of_potential_friends.append({
+            "username": user_with_same_birthday.get("username"),
+            "id": user_with_same_birthday.get("id")
+        })
+    return render_template("explore.html", error=error, list_of_potential_friends=list_of_potential_friends)
 
 
 @app.route("/requests")
