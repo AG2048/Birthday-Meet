@@ -1,3 +1,6 @@
+# TODO:
+# add flash to successful login/register/message sent/request sent/marked as read/accepted request/ignored request
+
 import os
 # Most of the initial configuration method is learnt from cs50 finance problem set
 """
@@ -308,4 +311,10 @@ def messages():
     GET request displays all messages, including sender, send time, read/unread... if it's unread, include a button to set it as read.
     """
     # TODO
+
+
+# TODO
+# add /send
+# add /sent
+
 
