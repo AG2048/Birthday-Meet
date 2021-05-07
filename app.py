@@ -179,7 +179,30 @@ def login():
     Only success login redirects to "/"
         GET requests/error POST renders same template
     """
-    # TODO:
+    # Make sure no error message pops out by default, log out user automatically
+    error = None
+    session.clear()
+
+    # Receiving from form in login.html
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+
+        # Only proceed if both fields are filled out
+        if (username and password):
+            user_info_of_username = db.execute("SELECT * FROM users WHERE username = ?", username)
+
+            # Only proceed if username exists AND password is correct.
+            # Give session and redirect
+            if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], password):
+                session["user_id"] = user_info_of_username[0]["id"]
+                redirect("/")
+
+        # If failed any of the requirements (filled in correct username and pass), generate error message and render template like a get request
+        error = "Incorrect username or password"
+
+    # Render login.html, and pass error message (if there is any)
+    return render_template("login.html", error=error)
 
 
 @app.route("/logout")
