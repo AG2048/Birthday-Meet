@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Requests
+{% endblock %}
+
+<!--get:-->
+<!--error,-->
+<!--list_of_all_requests (include message, sender username, date sent, id of the request)-->
+<!--    if list is empty, display separate message-->
+<!--    For the list, all values' name is same as name in database-->
+                <!--sender_username-->
+                <!--request_message-->
+                <!--when_sent-->
+<!--        posts:-->
+<!--            request_id-->
+<!--            accept or not (accepts: true or false)-->
+
+{% block main %}
+
+{% if error %}
+    <header>
+        <div class="alert alert-warning border text-center" role="alert">
+            {{ error }}
+        </div>
+    </header>
+{% endif %}
+
+<h1 class="display-5 fw-bold">Requests</h1>
+<h2 class="display-5 fw-bold">Username: {{username}}</h2>
+{% if list_of_all_requests %}
+    {% for request in list_of_all_requests %}
+        <div class="form-group">
+            <form action="/requests" method="post">
+                <p class="lead">
+                    Sender Username: {{ request.sender_username }}
+                </p>
+                <p class="lead">
+                    MESSAGE: {{ request.request_message }}
+                </p>
+                <input type="hidden" name="request_id" value="{{ request.id }}">
+                <button class="btn btn-primary" type="submit" name="accepts" value="true">Accept</button>
+                <button class="btn btn-secondary" type="submit" name="accepts" value="false">Ignore</button>
+            </form>
+        </div>
+    {% endfor %}
+{% else %}
+    NO REQUESTS LMAO
+{% endif %}
+{% endblock %}
