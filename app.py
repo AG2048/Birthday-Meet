@@ -472,10 +472,13 @@ def requests():
                         db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), sender_id)
                         # TODO: flash
                         return redirect("/requests")
-                    else:
+                    else if accepts == "false":
                         # user is ignoring this request
                         # TODO: flash
                         return redirect("/requests")
+                    else:
+                        # Error here, accepts is not true nor false
+                        error = "Invalid action"
                 else:
                     # this request is not directed at user
                     error = "Invalid friend request"
@@ -502,6 +505,9 @@ def messages():
         if yes, mark as read, change to db, then simply redirect back to messages
 
     GET request displays all messages, including sender, send time, read/unread... if it's unread, include a button to set it as read.
+    HTML:
+        get: pass on a list of messages (each is a dict with message, id of message (for post requests), sender username, sent time, is_read (true or false))
+        post: app.py receives the id of the message to "mark as read"
     """
     # TODO
 
