@@ -574,6 +574,7 @@ def messages():
 
 
 # TODO
+# add /friends (there should be a page just to see all your friends)
 # add /send
 # add /sent
 # add a /contact, where people can send messages to the moderators, submiting a form.
