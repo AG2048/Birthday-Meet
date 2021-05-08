@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Messages Sent
+{% endblock %}
+<!--list_of_messages_info.append({-->
+<!--            "message": message_from_database["message_text"],-->
+<!--            "id": message_from_database["id"],-->
+<!--            "receiver_username": receiver_username,-->
+<!--            "time_sent": message_from_database["when_sent"],-->
+<!--            "is_read": is_read-->
+<!--        })-->
+{% block main %}
+
+<h1 class="display-5 fw-bold">Messages Sent</h1>
+{% if list_of_messages_info %}
+    {% for message in list_of_messages_info %}
+        <p class="lead">
+            To: {{ message.receiver_username }}
+        </p>
+        <p class="lead">
+            Time Sent: {{ message.time_sent }}
+        </p>
+        <p class="lead">
+            "{{ message.message }}"
+        </p>
+        {% if message.is_read %}
+            <p class="lead">
+                read
+            </p>
+        {% else %}
+            <p class="lead">
+                unread
+            </p>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    You have not yet sent any message
+{% endif %}
+{% endblock %}
