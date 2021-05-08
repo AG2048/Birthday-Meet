@@ -570,6 +570,8 @@ def messages():
             "time_sent": message_from_database["when_sent"],
             "is_read": is_read
         })
+    # Reverse so newest comes first
+    list_of_messages_info.reverse()
     return render_template("messages.html", list_of_messages_info=list_of_messages_info, error=error)
 
 
