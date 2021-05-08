@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Overview
+{% endblock %}
+<!--list_of_potential_friends (a dict of user's username AND id) (in html first check if it's empty) (can access data with dot notation or square bracket: dict.value or dict["value"])-->
+<!--                if list is empty display diff messages-->
+<!--            error-->
+{% block main %}
+<!DOCTYPE html>
+<h1 class="display-5 fw-bold">Overview</h1>
+<h2 class="display-5 fw-bold">Username: {{username}}</h2>
+{% if list_of_potential_friends %}
+    {% for potential_friend in list_of_potential_friends %}
+        <form action="/explore" method="post">
+        <div class="form-group">
+            <p class="lead">
+                Username: {{ potential_friend.username }}
+            </p>
+            <input type="hidden" name="receiver_id" value="{{ potential_friend.id }}">
+            <input class="form-control" autocomplete="false" name="request_message" placeholder="Request message (can leave blank)" type="text">
+            <button class="btn btn-primary" type="submit">Send Friend Request!</button>
+        </div>
+        </form>
+    {% endfor %}
+{% else %}
+    NO FRIEND LMAO
+{% endif %}
+{% endblock %}
