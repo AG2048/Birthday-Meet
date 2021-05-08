@@ -1,46 +1,18 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Overview
+    Log In
 {% endblock %}
 
 {% block main %}
-    <div class="section">
-
-                <h1>Account Overview</h1>
-                <h2>Username: {{ username }}</h2>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Stock Symbol</th>
-                            <th>Quantity</th>
-                            <th>Current Market Price</th>
-                            <th>Total Value</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!--expecting a list of dictionaries as stocks_held-->
-                        {% for stock_held in stocks_held %}
-                            <tr>
-                                <td>{{ stock_held["symbol"] }}</td>
-                                <td>{{ stock_held["quantity"] }}</td>
-                                <td>{{ stock_held["price"]}}</td>
-                                <td>{{ stock_held["total_value"]}}</td>
-                            </tr>
-                        {% endfor %}
-                        <tr>
-                            <td>Cash Balance</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>{{ cash_balance}}</td>
-                        </tr>
-                        <tr>
-                            <td>TOTAL</td>
-                            <td>-</td>
-                            <td>-</td>
-                            <td>{{ total_balance}}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <h1>Log In</h1>
+    <form action="/login" method="post">
+        <div class="form-group">
+            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+        </div>
+        <div class="form-group">
+            <input class="form-control" name="password" placeholder="Password" type="password">
+        </div>
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form>
 {% endblock %}
