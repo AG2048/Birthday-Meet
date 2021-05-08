@@ -432,6 +432,7 @@ def explore():
             "username": user_with_same_birthday.get("username"),
             "id": user_with_same_birthday.get("id")
         })
+    list_of_potential_friends.sort(key = lambda l: l["username"])
     return render_template("explore.html", error=error, list_of_potential_friends=list_of_potential_friends)
 
 
