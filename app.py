@@ -640,7 +640,8 @@ def send():
     HTML posts to us:
         receiver_id and message_text
     """
-    error = None
+    error_receiver = None
+    error_message = None
 
     if request.method == "POST":
         receiver_id = method.form.get("receiver_id")
@@ -656,13 +657,13 @@ def send():
                     return redirect("/sent")
                 else:
                     # No message is sent
-                    error = "Please enter your message to send"
+                    error_message = "Please enter your message to send"
             else:
                 # receiver is not in user's friend list
-                error = "Receiver of this message is not your friend"
+                error_receiver = "Receiver of this message is not your friend"
         else:
             # No id given
-            error = "Invalid receiver"
+            error_receiver = "Invalid receiver"
     # Init empty list
     list_of_friends = []
     # Grab data from db
@@ -681,7 +682,7 @@ def send():
             )
     # Sort by username
     list_of_friends.sort(key = lambda l: l["username"])
-    return render_template("send.html", list_of_friends=list_of_friends, error=error)
+    return render_template("send.html", list_of_friends=list_of_friends, error_message=error_message, error_receiver=error_receiver)
 
 
 
