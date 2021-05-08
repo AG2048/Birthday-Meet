@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Overview
+{% endblock %}
+
+{% block main %}
+    <div class="section">
+
+                <h1>Account Overview</h1>
+                <h2>Username: {{ username }}</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Stock Symbol</th>
+                            <th>Quantity</th>
+                            <th>Current Market Price</th>
+                            <th>Total Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!--expecting a list of dictionaries as stocks_held-->
+                        {% for stock_held in stocks_held %}
+                            <tr>
+                                <td>{{ stock_held["symbol"] }}</td>
+                                <td>{{ stock_held["quantity"] }}</td>
+                                <td>{{ stock_held["price"]}}</td>
+                                <td>{{ stock_held["total_value"]}}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td>Cash Balance</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>{{ cash_balance}}</td>
+                        </tr>
+                        <tr>
+                            <td>TOTAL</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>{{ total_balance}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+{% endblock %}
