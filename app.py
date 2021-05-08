@@ -580,19 +580,48 @@ def messages():
 @app.route("/friends")
 @login_required
 def friends():
+    """Display list of friends of user"""
+    # Init a list to return later
     friends_usernames = []
+    # Grab data from db
     friend_id_lists_a = db.execute("SELECT user_2_id FROM friends WHERE user_1_id = ?", session.get("user_id"))
     friend_id_lists_b = db.execute("SELECT user_1_id FROM friends WHERE user_2_id = ?", session.get("user_id"))
+    # Loop thru, add usernames to main list
     for friend_id in friend_id_lists_a:
         friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"])
     for friend_id in friend_id_lists_b:
         friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"])
+    # Sort list of usernames
     friends_usernames.sort()
     return render_template("friends.html", friends_usernames=friends_usernames)
 
+
+@app.route("/sent")
+@login_required
+def sent():
+    """Display list of all messages sent by user"""
+    # Init a list to return later
+    list_of_messages_info = []
+    # Get necessary info
+    list_of_messages_from_database = db.execute("SELECT * FROM messages WHERE sender_id = ?", session.get("user_id"))
+    for message_from_database in list_of_messages_from_database:
+        # From db get username of receiver
+        receiver_username = db.execute("SELECT * FROM users WHERE id = ?", message_from_database["receiver_id"])[0]["username"]
+        # This turns the BIT into True/False
+        is_read = (message_from_database["is_read"] == 1)
+        list_of_messages_info.append({
+            "message": message_from_database["message_text"],
+            "id": message_from_database["id"],
+            "receiver_username": receiver_username,
+            "time_sent": message_from_database["when_sent"],
+            "is_read": is_read
+        })
+    # Reverse so newest comes first
+    list_of_messages_info.reverse()
+    return render_template("messages.html", list_of_messages_info=list_of_messages_info)
+
 # TODO
 # add /send
-# add /sent
 # add a /contact, where people can send messages to the moderators, submiting a form.
 # if have time, add a character limit to request messages?
 
