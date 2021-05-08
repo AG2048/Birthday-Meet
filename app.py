@@ -509,6 +509,27 @@ def messages():
         get: pass on a list of messages (each is a dict with message, id of message (for post requests), sender username, sent time, is_read (true or false))
         post: app.py receives the id of the message to "mark as read"
     """
+    error = None
+
+    if request.method == "POST":
+        id_of_message_to_mark = request.form.get("message_id")
+        if id_of_message_to_mark and id_of_message_to_mark.isnumeric():
+            message = db.execute("SELECT * FROM messages WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
+            if len(message) == 1:
+                if message[0]["is_read"] == 0:
+                    db.execute("UPDATE messages SET is_read = 1 WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
+                    # TODO: flash
+                    return redirect("/messages")
+                else:
+                    # message is already read...
+                    error = "Message is already marked as read"
+            else:
+                # message doesn't exist, or message is not directed at current user
+                error = "Invalid message"
+        else:
+            # Id isn't returned or id is not a number
+            error = "Invalid input"
+
     # TODO
 
 
