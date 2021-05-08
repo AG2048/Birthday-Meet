@@ -18,7 +18,7 @@ https://flask-session.readthedocs.io/en/latest/ (session config documentation)
 https://flask.palletsprojects.com/en/1.1.x/config/ (flask config documentation)
 """
 from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, session
+from flask import Flask, flash, redirect, render_template, session, request
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
