@@ -464,6 +464,9 @@ def requests():
             list_of_all_requests (where receiver is user, include message, sender username, date sent, id of the request)
                 if list is empty, display separate message
                 For the list, all values' name is same as name in database
+                sender_username
+                request_message
+                when_sent
         posts:
             request_id
             accept or not (accepts: true or false)
@@ -506,6 +509,8 @@ def requests():
             error = "Invalid input"
     # Get data of all requests directed to this person from database, then render
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
+    for every_request in list_of_all_requests:
+        every_request["sender_username"] = db.execute("SELECT * FROM users WHERE id = ?", every_request["sender_id"])[0]["username"]
     return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
 
 
