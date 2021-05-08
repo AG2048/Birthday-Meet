@@ -371,7 +371,7 @@ def explore():
             receiver_birth_month = receiver_info["month"]
             receiver_birth_day = receiver_info["day"]
             # Verify if it is a "possible friend"
-            if user_birth_month == receiver_birth_month and user_birth_day = receiver_birth_day:
+            if user_birth_month == receiver_birth_month and user_birth_day == receiver_birth_day:
                 # Verify if the receiving user is not already a friend
                 if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), receiver_id, receiver_id, session.get("user_id"))) == 0:
                     # Verify if receiving user already being sent a friend request
@@ -481,7 +481,7 @@ def requests():
                         db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), sender_id)
                         # TODO: flash
                         return redirect("/requests")
-                    else if accepts == "false":
+                    elif accepts == "false":
                         # user is ignoring this request, don't do anything. Just redirect
                         # TODO: flash
                         return redirect("/requests")
