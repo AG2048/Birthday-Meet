@@ -512,6 +512,7 @@ def requests():
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
     for every_request in list_of_all_requests:
         every_request["sender_username"] = db.execute("SELECT * FROM users WHERE id = ?", every_request["sender_id"])[0]["username"]
+    list_of_all_requests.reverse()
     return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
 
 
