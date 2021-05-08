@@ -26,8 +26,9 @@
         <p style="color: red;">{{ confirm_error }}</p>
         {% endif %}
         <div class="form-group">
+            Birthday:
             <select name="month">
-                <option disabled selected value="">-</option>
+                <option disabled selected value="">Month</option>
                 <option value="1">Jan</option>
                 <option value="2">Feb</option>
                 <option value="3">Mar</option>
@@ -42,7 +43,7 @@
                 <option value="12">Dec</option>
             </select>
             <select name="day">
-                <option disabled selected value="">-</option>
+                <option disabled selected value="">Day</option>
                 {% for number in range(1,32) %}
                     <option value="{{ number }}">{{ number }}</option>
                 {% endfor %}
