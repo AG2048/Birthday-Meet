@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Messages
+{% endblock %}
+<!--list_of_messages_info=list_of_messages_info, error=error-->
+<!--list_of_messages_info.append({-->
+<!--            "message": message_from_database["message_text"],-->
+<!--            "id": message_from_database["id"],-->
+<!--            "sender_username": sender_username,-->
+<!--            "time_sent": message_from_database["when_sent"],-->
+<!--            "is_read": is_read-->
+<!--        })-->
+{% block main %}
+
+{% if error %}
+    <header>
+        <div class="alert alert-warning border text-center" role="alert">
+            {{ error }}
+        </div>
+    </header>
+{% endif %}
+
+<h1 class="display-5 fw-bold">Messages</h1>
+<h2 class="display-5 fw-bold">Username: {{username}}</h2>
+{% if list_of_messages_info %}
+    {% for message in list_of_messages_info %}
+        <p class="lead">
+            From: {{ message.sender_username }}
+        </p>
+        <p class="lead">
+            Time Sent: {{ message.time_sent }}
+        </p>
+        <p class="lead">
+            "{{ message.message }}"
+        </p>
+        {% if message.is_read %}
+            <p class="lead">
+                read
+            </p>
+        {% else %}
+            <p class="lead">
+                unread
+            </p>
+        {% endif %}
+        {% if not message.is_read %}
+            <form action="/messages" method="post">
+                <div class="form-group">
+                    <input type="hidden" name="message_id" value="{{ message.id }}">
+                    <button class="btn btn-secondary" type="submit">Mark as read</button>
+                </div>
+            </form>
+        {% endif %}
+    {% endfor %}
+{% else %}
+    NO MESSAGES YET
+{% endif %}
+{% endblock %}
