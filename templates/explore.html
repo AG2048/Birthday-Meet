@@ -7,6 +7,15 @@
 <!--                if list is empty display diff messages-->
 <!--            error-->
 {% block main %}
+
+{% if error %}
+    <header>
+        <div class="alert alert-warning border text-center" role="alert">
+            {{ error }}
+        </div>
+    </header>
+{% endif %}
+
 <h1 class="display-5 fw-bold">Overview</h1>
 <h2 class="display-5 fw-bold">Username: {{username}}</h2>
 {% if list_of_potential_friends %}
