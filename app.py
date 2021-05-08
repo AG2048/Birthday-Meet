@@ -487,7 +487,7 @@ def requests():
                 error = "Invalid friend request"
         else:
             # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
-            error = "Invalid information"
+            error = "Invalid input"
 
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
     return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
@@ -529,6 +529,7 @@ def messages():
         else:
             # Id isn't returned or id is not a number
             error = "Invalid input"
+
 
     # TODO
 
