@@ -480,6 +480,7 @@ def requests():
             request_info = db.execute("SELECT * FROM requests WHERE id = ?", request_id)
             # Check if this request_id actually refers to a request
             if len(request_info) == 1:
+                request_info = request_info[0]
                 # Make sure this request is for user
                 if request_info["receiver_id"] == session.get("user_id"):
                     # Get sender's id, and remove the request from requests table
