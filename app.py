@@ -618,7 +618,7 @@ def sent():
         })
     # Reverse so newest comes first
     list_of_messages_info.reverse()
-    return render_template("messages.html", list_of_messages_info=list_of_messages_info)
+    return render_template("sent.html", list_of_messages_info=list_of_messages_info)
 
 # TODO
 # add /send
