@@ -114,6 +114,7 @@ def login_required(f):
     def decorated_function(*args, **kwargs):
         if session.get("user_id") is None:
             # TODO: flash a message "You are not logged in"
+            flash("You are currently not logged in!")
             return redirect("/login")
         return f(*args, **kwargs)
     return decorated_function
@@ -214,6 +215,7 @@ def login():
             if len(user_info_of_username) == 1 and check_password_hash(user_info_of_username[0]["hash"], request.form.get("password")):
                 session["user_id"] = user_info_of_username[0]["id"]
                 # TODO: add flash message
+                flash("login success!")
                 return redirect("/")
         # If failed any of the requirements (filled in correct username and pass), generate error message and render template like a get request
         error = "Incorrect username or password"
@@ -227,6 +229,7 @@ def logout():
     """Log user out by clearing session"""
     session.clear()
     # TODO: add flash message
+    flash("Logout successful!")
     return redirect("/")
 
 
@@ -294,6 +297,7 @@ def register():
                                 # Auto login user
                                 session["user_id"] = db.execute("SELECT * FROM users WHERE username = ?", username)[0]["id"]
                                 # TODO: add flash message
+                                flash("Registration complete!")
                                 return redirect("/")
                             else:
                                 # Month and day doesn't match
@@ -382,6 +386,7 @@ def explore():
                             db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), receiver_id)
                             db.execute("DELETE FROM requests WHERE sender_id = ? AND receiver_id = ?", receiver_id, session.get("user_id"))
                             # TODO: add flash message
+                            flash("This user have already sent you a request, you are now friends!")
                             return redirect("/explore")
                         else:
                             # User are the first to send a request
@@ -393,6 +398,7 @@ def explore():
                             now = datetime.now().strftime("%Y-%m-%d")
                             db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session.get("user_id"), receiver_id, message, now)
                             # TODO: add flash message
+                            flash("Request sent successfully!")
                             return redirect("/explore")
                     else:
                         # User have already sent a request to receiver
@@ -480,10 +486,11 @@ def requests():
                         # This request is accepted, add them into friend list
                         db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), sender_id)
                         # TODO: flash
+                        flash("Request accepted!")
                         return redirect("/requests")
                     elif accepts == "false":
                         # user is ignoring this request, don't do anything. Just redirect
-                        # TODO: flash
+                        flash("Request ignored!")
                         return redirect("/requests")
                     else:
                         # Error here, accepts is not true nor false
@@ -530,6 +537,7 @@ def messages():
                     # Update message as read
                     db.execute("UPDATE messages SET is_read = 1 WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
                     # TODO: flash
+                    flash("Message marked as read!")
                     return redirect("/messages")
                 else:
                     # message is already read...
