@@ -620,6 +620,73 @@ def sent():
     list_of_messages_info.reverse()
     return render_template("sent.html", list_of_messages_info=list_of_messages_info)
 
+
+@app.route("/send", methods=["GET", "POST"])
+@login_required
+def send():
+    """Display the page to send messages. Redirect to /sent after sending info and flash
+    error=none
+    POST:
+        check if a receiver_id is posted
+        check if you are friends
+        Check if there is actually message...
+        send message (add message to message list)
+        redirect to /sent
+        flash (message successfully sent!)
+
+        For this, the error type is box-specific
+    GET:
+        just simply return error message and list of friends (id and username) to send message to
+    HTML posts to us:
+        receiver_id and message_text
+    """
+    error = None
+
+    if request.method == "POST":
+        receiver_id = method.form.get("receiver_id")
+        if receiver_id:
+            # Check if the receiver is a friend
+            if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id"))) >= 1:
+                message_text = method.form.get("message_text")
+                if message_text:
+                    # Add message to db, and redirect with flash
+                    now = datetime.now().strftime("%Y-%m-%d")
+                    db.execute("INSERT INTO messages (sender_id, receiver_id, message_text, when_sent, is_read) VALUES (?, ?, ?, ?, 0)", session.get("user_id"), receiver_id, message_text, now)
+                    flash("Message successfully sent!")
+                    return redirect("/sent")
+                else:
+                    # No message is sent
+                    error = "Please enter your message to send"
+            else:
+                # receiver is not in user's friend list
+                error = "Receiver of this message is not your friend"
+        else:
+            # No id given
+            error = "Invalid receiver"
+    # Init empty list
+    list_of_friends = []
+    # Grab data from db
+    friend_id_lists_a = db.execute("SELECT user_2_id FROM friends WHERE user_1_id = ?", session.get("user_id"))
+    friend_id_lists_b = db.execute("SELECT user_1_id FROM friends WHERE user_2_id = ?", session.get("user_id"))
+    # Loop thru all friends to get their username and id
+    for friend_id in friend_id_lists_a:
+        list_of_friends.append(
+            "username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"],
+            "id": friend_id
+            )
+    for friend_id in friend_id_lists_b:
+        list_of_friends.append(
+            "username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"],
+            "id": friend_id
+            )
+    # Sort by username
+    list_of_friends.sort(key = lambda l: l["username"])
+    return render_template("send.html", list_of_friends=list_of_friends, error=error)
+
+
+
+
+
 # TODO
 # add /send
 # add a /contact, where people can send messages to the moderators, submiting a form.
