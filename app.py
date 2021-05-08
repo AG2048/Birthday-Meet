@@ -507,7 +507,8 @@ def messages():
     GET request displays all messages, including sender, send time, read/unread... if it's unread, include a button to set it as read.
     HTML:
         get: pass on a list of messages (each is a dict with message, id of message (for post requests), sender username, sent time, is_read (true or false))
-        post: app.py receives the id of the message to "mark as read"
+            (list_of_messages_info =>message, id, sender_username, time_sent, is_read)
+        post: app.py receives the id of the message to "mark as read" (message_id)
     """
     error = None
 
@@ -530,8 +531,20 @@ def messages():
             # Id isn't returned or id is not a number
             error = "Invalid input"
 
-
-    # TODO
+    list_of_messages_info = []
+    list_of_messages_from_database = db.execute("SELECT * FROM messages WHERE receiver_id = ?", session.get("user_id"))
+    for message_from_database in list_of_messages_from_database:
+        sender_username = db.execute("SELECT * FROM users WHERE id = ?", message_from_database["sender_id"])
+        # This turns the BIT into True/False
+        is_read = (message_from_database["is_read"] == 1)
+        list_of_messages_info.append({
+            "message": message_from_database["message_text"],
+            "id": message_from_database["id"],
+            "sender_username": sender_username,
+            "time_sent": message_from_database["when_sent"],
+            "is_read": is_read
+        })
+    return render_template("messages.html", list_of_messages_info=list_of_messages_info, error=error)
 
 
 # TODO
