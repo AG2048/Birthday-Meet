@@ -273,7 +273,7 @@ def register():
 
     # Receiving from form in register.html
     if request.method == "POST":
-        username = request.form.get("username")
+        username = request.form.get("username").lower()
 
         # Proceed if username is entered
         if username:
