@@ -296,16 +296,22 @@ def register():
                                 # TODO: add flash message
                                 return redirect("/")
                             else:
+                                # Month and day doesn't match
                                 birthday_error = "Invalid birthday"
                         else:
+                            # Month or day is not numeric, and month is not one of 12 months
                             birthday_error = "Invalid birthday"
                     else:
+                        # Passwords don't match
                         confirm_error = "Passwords do not match"
                 else:
+                    # Password is not entered, or it's too short
                     password_error = "Password need to be 8 characters long"
             else:
+                # Username already exists
                 username_error = "Username already taken"
         else:
+            # Username not inputed
             username_error = "Invalid username"
 
     # Render login.html, and pass error message (if there is any)
@@ -451,6 +457,7 @@ def requests():
             error,
             list_of_all_requests (where receiver is user, include message, sender username, date sent, id of the request)
                 if list is empty, display separate message
+                For the list, all values' name is same as name in database
         posts:
             request_id
             accept or not (accepts: true or false)
@@ -466,14 +473,16 @@ def requests():
             if len(request_info) == 1:
                 # Make sure this request is for user
                 if request_info["receiver_id"] == session.get("user_id"):
+                    # Get sender's id, and remove the request from requests table
                     sender_id = request_info["sender_id"]
                     db.execute("DELETE FROM requests WHERE id = ?", request_id)
                     if accepts == "true":
+                        # This request is accepted, add them into friend list
                         db.execute("INSERT INTO friends (user_1_id, user_2_id) VALUES (?, ?)", session.get("user_id"), sender_id)
                         # TODO: flash
                         return redirect("/requests")
                     else if accepts == "false":
-                        # user is ignoring this request
+                        # user is ignoring this request, don't do anything. Just redirect
                         # TODO: flash
                         return redirect("/requests")
                     else:
@@ -488,10 +497,9 @@ def requests():
         else:
             # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
             error = "Invalid input"
-
+    # Get data of all requests directed to this person from database, then render
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
     return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
-    # TODO
 
 
 @app.route("/messages")
@@ -515,9 +523,11 @@ def messages():
     if request.method == "POST":
         id_of_message_to_mark = request.form.get("message_id")
         if id_of_message_to_mark and id_of_message_to_mark.isnumeric():
+            # Get message's info from db, where id is what I want AND it's directed at user
             message = db.execute("SELECT * FROM messages WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
             if len(message) == 1:
                 if message[0]["is_read"] == 0:
+                    # Update message as read
                     db.execute("UPDATE messages SET is_read = 1 WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
                     # TODO: flash
                     return redirect("/messages")
@@ -525,16 +535,18 @@ def messages():
                     # message is already read...
                     error = "Message is already marked as read"
             else:
-                # message doesn't exist, or message is not directed at current user
+                # message doesn't exist, or message is not directed at current user (both will cause len() 0 from SELECT)
                 error = "Invalid message"
         else:
             # Id isn't returned or id is not a number
             error = "Invalid input"
-
+    # Init a list to return later
     list_of_messages_info = []
+    # Get necessary info
     list_of_messages_from_database = db.execute("SELECT * FROM messages WHERE receiver_id = ?", session.get("user_id"))
     for message_from_database in list_of_messages_from_database:
-        sender_username = db.execute("SELECT * FROM users WHERE id = ?", message_from_database["sender_id"])
+        # From db get username of sender
+        sender_username = db.execute("SELECT * FROM users WHERE id = ?", message_from_database["sender_id"])[0]["username"]
         # This turns the BIT into True/False
         is_read = (message_from_database["is_read"] == 1)
         list_of_messages_info.append({
