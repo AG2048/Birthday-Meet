@@ -584,9 +584,9 @@ def friends():
     friend_id_lists_a = db.execute("SELECT user_2_id FROM friends WHERE user_1_id = ?", session.get("user_id"))
     friend_id_lists_b = db.execute("SELECT user_1_id FROM friends WHERE user_2_id = ?", session.get("user_id"))
     for friend_id in friend_id_lists_a:
-        friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id)[0]["username"])
+        friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"])
     for friend_id in friend_id_lists_b:
-        friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id)[0]["username"])
+        friends_usernames.append(db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"])
     friends_usernames.sort()
     return render_template("friends.html", friends_usernames=friends_usernames)
 
