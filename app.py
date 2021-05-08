@@ -424,7 +424,7 @@ def explore():
         if len(db.execute("SELECT * FROM requests WHERE sender_id = ? AND receiver_id = ?", session.get("user_id"), user_with_same_birthday.get("id"))) != 0:
             # User have already sent this person a request
             continue
-        if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), user_with_same_birthday.get("id"), user_with_same_birthday.get("id"), session.get("user_id"))) == 0:
+        if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", session.get("user_id"), user_with_same_birthday.get("id"), user_with_same_birthday.get("id"), session.get("user_id"))) != 0:
             # User already friend with this person
             continue
         # This is a potential friend, add to list
