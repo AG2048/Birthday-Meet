@@ -204,7 +204,7 @@ def login():
 
     # Receiving from form in login.html
     if request.method == "POST":
-        username = request.form.get("username")
+        username = request.form.get("username").lower()
 
         # Only proceed if both fields are filled out
         if username and request.form.get("password"):
