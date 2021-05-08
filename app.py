@@ -537,7 +537,7 @@ def messages():
 
     if request.method == "POST":
         id_of_message_to_mark = request.form.get("message_id")
-        if id_of_message_to_mark and id_of_message_to_mark.isnumeric():
+        if id_of_message_to_mark:
             # Get message's info from db, where id is what I want AND it's directed at user
             message = db.execute("SELECT * FROM messages WHERE id = ? AND receiver_id = ?", id_of_message_to_mark, session.get("user_id"))
             if len(message) == 1:
