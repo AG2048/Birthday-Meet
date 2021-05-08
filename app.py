@@ -672,13 +672,13 @@ def send():
     # Loop thru all friends to get their username and id
     for friend_id in friend_id_lists_a:
         list_of_friends.append(
-            "username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"],
-            "id": friend_id
+            {"username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"],
+            "id": friend_id}
             )
     for friend_id in friend_id_lists_b:
         list_of_friends.append(
-            "username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"],
-            "id": friend_id
+            {"username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"],
+            "id": friend_id}
             )
     # Sort by username
     list_of_friends.sort(key = lambda l: l["username"])
