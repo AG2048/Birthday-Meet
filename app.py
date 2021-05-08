@@ -570,5 +570,6 @@ def messages():
 # TODO
 # add /send
 # add /sent
-
+# add a /contact, where people can send messages to the moderators, submiting a form.
+# if have time, add a character limit to request messages?
 
