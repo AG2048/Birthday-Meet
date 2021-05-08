@@ -280,7 +280,7 @@ def register():
             # Proceed if username does not exist in db
             if len(db.execute("SELECT * FROM users WHERE username = ?", username)) == 0:
                 # Proceed if length of password is at least 8 characters
-                if request.form.get("password") and len(request.form.get("username")) >= 8:
+                if request.form.get("password") and len(request.form.get("password")) >= 8:
                     # Proceed if user entered same password twice
                     if request.form.get("password") == request.form.get("confirm"):
                         # At this point, username and password are all correct

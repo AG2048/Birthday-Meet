@@ -10,12 +10,21 @@
         <div class="form-group">
             <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
         </div>
+        {% if username_error %}
+        <p style="color: red;">{{ username_error }}</p>
+        {% endif %}
         <div class="form-group">
             <input class="form-control" name="password" placeholder="Password" type="password">
         </div>
+        {% if password_error %}
+        <p style="color: red;">{{ password_error }}</p>
+        {% endif %}
         <div class="form-group">
             <input class="form-control" name="confirm" placeholder="Confirm Password" type="password">
         </div>
+        {% if confirm_error %}
+        <p style="color: red;">{{ confirm_error }}</p>
+        {% endif %}
         <div class="form-group">
             <select name="month">
                 <option disabled selected value="">-</option>
@@ -39,6 +48,11 @@
                 {% endfor %}
             </select>
         </div>
-        <button class="btn btn-primary" type="submit">Log In</button>
+        {% if birthday_error %}
+        <p style="color: red;">{{ birthday_error }}</p>
+        {% endif %}
+        <div class="form-group">
+            <button class="btn btn-primary" type="submit">Log In</button>
+        </div>
     </form>
 {% endblock %}
