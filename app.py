@@ -515,7 +515,7 @@ def requests():
     return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
 
 
-@app.route("/messages")
+@app.route("/messages", methods=["GET", "POST"])
 @login_required
 def messages():
     """Display a page full of ALL messages (new ones first) (html file includes the message content, sender and message id)
