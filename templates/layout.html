@@ -28,7 +28,15 @@
         <nav class="navbar navbar-expand-md navbar-light bg-light border">
             <!--The "brand" which is the top left of the bar-->
             <!--Span determines the colour of the text-->
-            <a class="navbar-brand" href="/"><span class="blue">Birthday</span> <span class="green">Meet</span></a>
+            <a class="navbar-brand" href="/">
+                <!--https://github.com/creativetimofficial/material-kit/issues/107-->
+                <div class="logo-image">
+                    <img src="/static/cake-sign-icon-vector-23782623.jpg" class="img-fluid">
+                </div>
+            </a>
+            <a class="navbar-brand" href="/">
+                <span class="blue">Birthday</span> <span class="green">Meet</span>
+            </a>
             <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbar" data-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
