@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Send Message
+{% endblock %}
+<!--render_template("send.html", list_of_friends=list_of_friends, error_message=error_message, error_receiver=error_receiver)-->
+{% block main %}
+    <h1 class="display-5 fw-bold">Send Message</h1>
+    <form action="/send" method="post">
+        <div class="form-group">
+            <label for="messageReceiverSelectForm">Send to:</label>
+            <select class="form-control" name="receiver_id" id="messageReceiverSelectForm">
+            <option disabled selected value="">-</option>
+            {% for friend in list_of_friends %}
+                <option value="{{ friend['id'] }}">{{ friend["username"] }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        {% if error_receiver %}
+            <p style="color: red;">{{ error_receiver }}</p>
+        {% endif %}
+        <div class="form-group">
+            <label for="messageTextBox">Your message:</label>
+            <textarea class="form-control" id="messageTextBox" rows="3" name="message_text"></textarea>
+        </div>
+        {% if error_message %}
+            <p style="color: red;">{{ error_message }}</p>
+        {% endif %}
+        <button class="btn btn-primary" type="submit">Log In</button>
+    </form>
+{% endblock %}
