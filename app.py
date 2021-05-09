@@ -682,7 +682,38 @@ def send():
     return render_template("send.html", list_of_friends=list_of_friends, error_message=error_message, error_receiver=error_receiver)
 
 
-
+@app.route("/contact", methods=["GET", "POST"])
+@login_required
+def contact():
+    """Contact us
+    GET:
+        display a textfield
+    POST:
+        process message and always add it to contact_messages
+        ONLY ALLOW 1 message per day!
+    HTML:
+        posts: message_text
+        get: error_message
+    """
+    error_message = None
+    if request.method == "POST":
+        message_text = request.form.get("message_text")
+        if message_text:
+            now = datetime.now().strftime("%Y-%m-%d")
+            # Check if last message is sent in same day
+            message_sent_today = db.execute("SELECT * FROM contact_messages WHERE sender_id = ? AND when_sent = ?", session.get("user_id"), now)
+            if len(message_sent_today) == 0:
+                # send the message and flash success
+                db.execute("INSERT INTO contact_messages (sender_id, message_text, when_sent) VALUES (?, ?, ?)", session.get("user_id"), message_text, now)
+                flash("Message successfully sent!")
+                return redirect("/")
+            else:
+                # User already sent message
+                flash("Error: You have already sent a message today!")
+        else:
+            # No message is sent
+            error_message = "Please enter your message to send"
+    return render_template("contact.html", error_message=error_message)
 
 
 # TODO
