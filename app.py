@@ -360,6 +360,8 @@ def explore():
             list_of_potential_friends (a dict of user's username AND id) (in html first check if it's empty) (can access data with dot notation or square bracket: dict.value or dict["value"])
                 if list is empty display diff messages
             error
+
+    have a 100-char limit to message
     """
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
@@ -389,15 +391,21 @@ def explore():
                         else:
                             # User are the first to send a request
                             # Get message and add a default if not specified
-                            message = request.form.get("message")
+                            message = request.form.get("request_message")
+                            print(message)
                             if not message:
                                 message = "Hello, I would like to add you as my friend!"
-                            # Keep track of when is this request sent
-                            now = datetime.now().strftime("%Y-%m-%d")
-                            db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session.get("user_id"), receiver_id, message, now)
-                            # TODO: add flash message
-                            flash("Request sent successfully!")
-                            return redirect("/explore")
+                            print(message)
+                            if len(message) <= 100:
+                                # Keep track of when is this request sent
+                                now = datetime.now().strftime("%Y-%m-%d")
+                                db.execute("INSERT INTO requests (sender_id, receiver_id, request_message, when_sent) VALUES (?, ?, ?, ?)", session.get("user_id"), receiver_id, message, now)
+                                # TODO: add flash message
+                                flash("Request sent successfully!")
+                                return redirect("/explore")
+                            else:
+                                # Message too long
+                                flash("Error: Request message too long! (100 characters max)")
                     else:
                         # User have already sent a request to receiver
                         flash("Error: You have already sent a request")
@@ -717,6 +725,5 @@ def contact():
 
 
 # TODO
-# add a /contact, where people can send messages to the moderators, submiting a form.
 # if have time, add a character limit to request messages?
 
