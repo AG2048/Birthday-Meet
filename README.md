@@ -88,7 +88,7 @@ A file that includes certain classes not included in the bootstrap library
 ##### app.py:
 This is the core file of the entire website. 
 
-The main functionality of this file is to respond to every GET request and POST request. For every POST request, the code also verifies if the request is "legal" and doesn't break the website (such as sending request to a non-existing user, accepting request from a user with different birthday, sending messages to another user who's not a friend, etc.). At the same time, the code stores information into [birthday-meet.db](#birthday-meet.db)
+The main functionality of this file is to respond to every GET request and POST request. For every POST request, the code also verifies if the request is "legal" and doesn't break the website (such as sending request to a non-existing user, accepting request from a user with different birthday, sending messages to another user who's not a friend, etc.). At the same time, the code stores information into [birthday-meet.db](#birthday-meetdb)
 
 ##### birthday-meet.db:
 This database file stores the following tables:
