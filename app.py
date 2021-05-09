@@ -392,10 +392,8 @@ def explore():
                             # User are the first to send a request
                             # Get message and add a default if not specified
                             message = request.form.get("request_message")
-                            print(message)
                             if not message:
                                 message = "Hello, I would like to add you as my friend!"
-                            print(message)
                             if len(message) <= 100:
                                 # Keep track of when is this request sent
                                 now = datetime.now().strftime("%Y-%m-%d")
@@ -648,10 +646,8 @@ def send():
 
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
-        print(receiver_id)
         if receiver_id:
             # Check if the receiver is a friend
-            print(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id")))
             if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id"))) >= 1:
                 message_text = request.form.get("message_text")
                 if message_text:
@@ -722,8 +718,3 @@ def contact():
             # No message is sent
             error_message = "Please enter your message to send"
     return render_template("contact.html", error_message=error_message)
-
-
-# TODO
-# if have time, add a character limit to request messages?
-
