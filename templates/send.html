@@ -12,7 +12,7 @@
             <select class="form-control" name="receiver_id" id="messageReceiverSelectForm">
             <option disabled selected value="">-</option>
             {% for friend in list_of_friends %}
-                <option value="{{ friend['id'] }}">{{ friend["username"] }}</option>
+                <option value="{{ friend.id }}">{{ friend.username }}</option>
             {% endfor %}
             </select>
         </div>

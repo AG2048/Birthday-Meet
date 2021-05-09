@@ -645,8 +645,10 @@ def send():
 
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
+        print(receiver_id)
         if receiver_id:
             # Check if the receiver is a friend
+            print(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id")))
             if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id"))) >= 1:
                 message_text = request.form.get("message_text")
                 if message_text:
@@ -673,12 +675,12 @@ def send():
     for friend_id in friend_id_lists_a:
         list_of_friends.append(
             {"username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_2_id"])[0]["username"],
-            "id": friend_id}
+            "id": friend_id["user_2_id"]}
             )
     for friend_id in friend_id_lists_b:
         list_of_friends.append(
             {"username": db.execute("SELECT username FROM users WHERE id = ?", friend_id["user_1_id"])[0]["username"],
-            "id": friend_id}
+            "id": friend_id["user_1_id"]}
             )
     # Sort by username
     list_of_friends.sort(key = lambda l: l["username"])
