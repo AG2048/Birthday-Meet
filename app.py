@@ -499,13 +499,13 @@ def requests():
                         flash("Error: Invalid action")
                 else:
                     # this request is not directed at user
-                    flash("Error: Invalid friend request"
+                    flash("Error: Invalid friend request")
             else:
                 # request doesn't exist in requests table
-                flash("Error: Invalid friend request"
+                flash("Error: Invalid friend request")
         else:
             # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
-            flash("Error: Invalid input"
+            flash("Error: Invalid input")
     # Get data of all requests directed to this person from database, then render
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
     for every_request in list_of_all_requests:
@@ -544,13 +544,13 @@ def messages():
                     return redirect("/messages")
                 else:
                     # message is already read...
-                    flash("Error: Message is already marked as read"
+                    flash("Error: Message is already marked as read")
             else:
                 # message doesn't exist, or message is not directed at current user (both will cause len() 0 from SELECT)
-                flash("Error: Invalid message"
+                flash("Error: Invalid message")
         else:
             # Id isn't returned or id is not a number
-            flash("Error: Invalid input"
+            flash("Error: Invalid input")
     # Init a list to return later
     list_of_messages_info = []
     # Get necessary info
