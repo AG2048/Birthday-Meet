@@ -90,23 +90,23 @@ The main functionality of this file is to respond to every GET request and POST 
 
 ##### birthday-meet.db:
 This database file stores the following tables:
-- users
-  - id
-  - username
-  - hash
-  - month
-  - day
-- requests
-  - id
-  - sender_id
-  - receiver_id
-  - request_message
-  - when_sent
-- friends
-  - user_1_id
-  - user_2_id
-- messages
-  - id
+- users *A table that stores all the users' info*
+  - id *Integer*
+  - username *Text*
+  - hash *Text, the hash of the user's password*
+  - month *Integer, the month of the user's birthday*
+  - day *Integer, the day of the user's birthday*
+- requests *A table that stores all the requests*
+  - id *Integer, id of the request*
+  - sender_id *Integer, id of the user who sent this request*
+  - receiver_id *Integer, id of the user who is receiving this request*
+  - request_message *Text, the request message*
+  - when_sent *Date, the date of when the request is sent*
+- friends *A table linking two users*
+  - user_1_id *Integer*
+  - user_2_id *Integer*
+- messages *A table of messages sent between users*
+  - id *Integer, id of the message*
   - sender_id
   - receiver_id
   - message_text
