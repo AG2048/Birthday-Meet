@@ -13,4 +13,4 @@ In the home page, the user will be seeing a brief description of this website an
 ##### Send:
 ##### Contact Us:
 ##### Register:
-##### Login:
+##### Log In:
