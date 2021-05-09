@@ -20,37 +20,70 @@
         <a href="/sent"><button class="btn btn-secondary">Sent Messages</button></a>
     </div>
 </h1>
+<h6 class="display-5 fw-bold align-center">You can only send/receive messages to/from your friends</h6>
 <hr>
 {% if list_of_messages_info %}
+    <h2 class="display-5 align-center">List of all your messages:</h2>
     {% for message in list_of_messages_info %}
-        <p class="lead">
-            From: {{ message.sender_username }}
-        </p>
-        <p class="lead">
-            Time Sent: {{ message.time_sent }}
-        </p>
-        <p class="lead">
-            "{{ message.message }}"
-        </p>
-        {% if message.is_read %}
-            <p class="lead">
-                read
-            </p>
-        {% else %}
-            <p class="lead">
-                unread
-            </p>
-        {% endif %}
-        {% if not message.is_read %}
-            <form action="/messages" method="post">
-                <div class="form-group">
-                    <input type="hidden" name="message_id" value="{{ message.id }}">
-                    <button class="btn btn-secondary" type="submit">Mark as read</button>
+        <!--https://www.w3schools.com/css/css3_borders.asp-->
+        <div class="container-fluid">
+            <div class="row" style="
+            border-radius: 30px 30px 0px 0px;
+            background: #73AD21;
+            padding-left: 20px;
+            width: 100%;
+            text-align: left;
+        ">
+                <h4 class="display-5">
+                    <span style="font-weight: bold;">{{ message.sender_username }}</span> sent on <span style="font-weight: bold;">{{ message.time_sent }}</span>
+                </h4>
+            </div>
+            <div class="row" style="
+                background: #ffff00;
+                padding-left: 20px;
+                padding-right: 20px;
+                width: 100%;
+                text-align: left;
+            ">
+                <p>
+                    {{ message.message }}
+                </p>
+            </div>
+            <div class="row justify-content-between"style="
+                border-radius: 0px 0px 20px 20px;
+                background: #ffff00;
+                padding-left: 20px;
+                padding-right: 20px;
+                width: 100%;
+                text-align: left;
+            ">
+                {% if message.is_read %}
+                <div class="col-4">
+                    <h4>
+                        Read
+                    </h4>
                 </div>
-            </form>
-        {% endif %}
+                {% else %}
+                <div class="col-4">
+                    <h4>
+                        Unead
+                    </h4>
+                </div>
+                <div class="col-8" style="text-align: right;">
+                    <form action="/messages" method="post">
+                        <div class="form-group">
+                            <input type="hidden" name="message_id" value="{{ message.id }}">
+                            <button class="btn btn-secondary" type="submit">Mark as read</button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <br>
     {% endfor %}
 {% else %}
-    NO MESSAGES YET
+    <h2 class="display-5 fw-bold align-center">You have received no messages at this moment</h2>
+    <h4 class="display-5 fw-bold align-center">Add some friends, or send a message to your friends!</h4>
 {% endif %}
 {% endblock %}

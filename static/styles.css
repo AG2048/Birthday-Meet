@@ -67,3 +67,8 @@ footer {
 .align-center{
     text-align: center;
 }
+.container-fluid {
+    margin-right: 0;
+    margin-left: 0;
+    overflow: hidden;
+}
