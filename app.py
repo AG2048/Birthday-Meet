@@ -89,7 +89,9 @@ CREATE TABLE messages (
     );
 """
 
+"""CONSTANTS"""
 MONTHS = [None,"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+DEFAULT_REQUEST_MESSAGE = "Hello, I would like to add you as my friend!"
 
 @app.after_request
 def after_request(response):
@@ -393,7 +395,7 @@ def explore():
                             # Get message and add a default if not specified
                             message = request.form.get("request_message")
                             if not message:
-                                message = "Hello, I would like to add you as my friend!"
+                                message = DEFAULT_REQUEST_MESSAGE
                             if len(message) <= 100:
                                 # Keep track of when is this request sent
                                 now = datetime.now().strftime("%Y-%m-%d")
