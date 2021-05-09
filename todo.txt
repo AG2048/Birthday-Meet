@@ -9,7 +9,6 @@ add cake background image
 GET CAKE LOGO (or cite one) (OR REPLACE THE BIRTHDAY MEET TEXT WITH AN IMAGE)
 
 format:
-    contact
     friends
     index
     messages
