@@ -34,15 +34,21 @@ This page displays all the potential friends to be added (other users with the s
 
 There is a default request message if the user did not enter a request message.
 
+If there are no potential friends, it will display a different message.
+
 ##### Requests:
 `ref="/requests"` after log in `requests.html`
 
 This page displays all unresponded friend requests that is directed to the user. The user may accept (which adds the sender to user's friend list) or ignore (the request is deleted, and the sender may send another request)
 
+If there are no requests, it will display a different message.
+
 ##### Friends:
 `ref="/friends"` after log in `friends.html`
 
 This page displays a list of the user's friends' usernames.
+
+If the user have no friends, it will display a different message.
 
 ##### Messages:
 `ref="/messages"` after log in `messages.html`
@@ -51,10 +57,14 @@ This page displays a list of all messages directed to user, and allows user to m
 
 This page also includes two buttons to direct users to [Send](#Send) and [Sent](#Sent).
 
+If the user has not received any message, it will display a different message.
+
 ##### Send:
 `ref="/send"` after log in `send.html`
 
 This page allows user to select one of user's friends to send a message. 
+
+If the user has not sent any message, it will display a different message.
 
 ##### Sent:
 `ref="/sent"` after log in `sent.html`
