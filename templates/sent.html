@@ -11,8 +11,13 @@
 <!--            "is_read": is_read-->
 <!--        })-->
 {% block main %}
-
-<h1 class="display-5 fw-bold">Messages Sent</h1>
+<h1>
+    <span class="display-5 fw-bold">Messages Sent</span>
+    <div class="float-right">
+        <a href="/send"><button class="btn btn-primary">Send Message</button></a>
+        <a href="/messages"><button class="btn btn-secondary">Messages</button></a>
+    </div>
+</h1>
 {% if list_of_messages_info %}
     {% for message in list_of_messages_info %}
         <p class="lead">

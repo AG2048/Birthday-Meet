@@ -18,14 +18,6 @@
 
 {% block main %}
 
-{% if error %}
-    <header>
-        <div class="alert alert-warning border text-center" role="alert">
-            {{ error }}
-        </div>
-    </header>
-{% endif %}
-
 <h1 class="display-5 fw-bold">Requests</h1>
 {% if list_of_all_requests %}
     {% for request in list_of_all_requests %}

@@ -8,24 +8,16 @@
 <!--            error-->
 {% block main %}
 
-{% if error %}
-    <header>
-        <div class="alert alert-warning border text-center" role="alert">
-            {{ error }}
-        </div>
-    </header>
-{% endif %}
-
 <h1 class="display-5 fw-bold">Explore</h1>
 {% if list_of_potential_friends %}
     {% for potential_friend in list_of_potential_friends %}
         <form action="/explore" method="post">
         <div class="form-group">
             <p class="lead">
-                Username: {{ potential_friend.username }}
+                {{ potential_friend.username }}
             </p>
             <input type="hidden" name="receiver_id" value="{{ potential_friend.id }}">
-            <input class="form-control" autocomplete="false" name="request_message" placeholder="Request message (can leave blank)" type="text">
+            <input type="search" class="form-control" autocomplete="off" name="request_message" placeholder="Request message (can leave blank)" type="text">
             <button class="btn btn-primary" type="submit">Send Friend Request!</button>
         </div>
         </form>

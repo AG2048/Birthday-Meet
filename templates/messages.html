@@ -12,16 +12,14 @@
 <!--            "is_read": is_read-->
 <!--        })-->
 {% block main %}
-
-{% if error %}
-    <header>
-        <div class="alert alert-warning border text-center" role="alert">
-            {{ error }}
-        </div>
-    </header>
-{% endif %}
-
-<h1 class="display-5 fw-bold">Messages</h1>
+<!--https://www.geeksforgeeks.org/how-to-place-button-in-top-right-corner-using-bootstrap/-->
+<h1>
+    <span class="display-5 fw-bold">Messages</span>
+    <div class="float-right">
+        <a href="/send"><button class="btn btn-primary">Send Message</button></a>
+        <a href="/sent"><button class="btn btn-secondary">Sent Messages</button></a>
+    </div>
+</h1>
 {% if list_of_messages_info %}
     {% for message in list_of_messages_info %}
         <p class="lead">

@@ -1,5 +1,5 @@
-add flash to EVERY redirect
 Layout change the ICON in <head>
 ADD TO messages/send/sent buttons to redirect between the 3 pages
-remove all Print statements
 add some text for each page to explain what to do?
+
+check diff button types - match each for each page
