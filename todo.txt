@@ -10,7 +10,3 @@ GET CAKE LOGO (or cite one) (OR REPLACE THE BIRTHDAY MEET TEXT WITH AN IMAGE)
 
 format:
     index
-    messages
-    send
-    sent
-for messages, send, sent (be sure in say that you can only send messages/receive messages from your friends)
