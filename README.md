@@ -1,6 +1,9 @@
 # Birthday-Meet
 #### Video Demo:
 #### Description:
+Have you ever had the thought of meeting someone who shares your birthday, but it just seems impossible to meet anyone like that?
+
+Well, Birthday Meet is the solution to that problem! With this online social platform, you can easily find other people who share your birthday and send message to them to make new friends!
 
 ##### Home Page:
 `href="/"`
@@ -56,7 +59,7 @@ This page allows user to select one of user's friends to send a message.
 ##### Sent:
 `ref="/sent"` after log in
 
-This page displays a list of all messages sent by user, displays if the message is `read`.
+This page displays a list of all messages sent by user, displays if the message is `read` or `unread`.
 
 This page also includes two buttons to direct users to [Send](#Send) and [Messages](#Messages).
 
