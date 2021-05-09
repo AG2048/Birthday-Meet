@@ -1,9 +1,0 @@
-Layout change the ICON in <head>
-
-add cake background image
-
-GET CAKE LOGO (or cite one) (OR REPLACE THE BIRTHDAY MEET TEXT WITH AN IMAGE)
-
-add image to index
-
-add pictures to readme
