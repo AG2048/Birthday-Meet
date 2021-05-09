@@ -6,6 +6,7 @@
 <!--render_template("send.html", list_of_friends=list_of_friends, error_message=error_message, error_receiver=error_receiver)-->
 {% block main %}
     <h1 class="display-5 fw-bold">Send Message</h1>
+    <hr>
     <form action="/send" method="post">
         <div class="form-group">
             <label for="messageReceiverSelectForm">Send to:</label>
