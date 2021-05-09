@@ -9,12 +9,17 @@
 <h1 class="display-5 fw-bold">Friends</h1>
 <hr>
 {% if friends_usernames %}
+    <h2 class="display-5 align-center">List of all your current friends:</h2>
+    <h4 class="display-5 fw-bold align-center">Names are sorted alphabetically</h2>
+    <ul>
     {% for friend_username in friends_usernames %}
-        <p class="lead">
-            {{ friend_username }}
-        </p>
+        <li>
+            <h4 class="display-5">{{ friend_username }}</h4>
+        </li>
     {% endfor %}
+    </ul>
 {% else %}
-    NO FRIEND
+    <h2 class="display-5 fw-bold align-center">You have no friends in your friend list at this moment</h2>
+    <h4 class="display-5 fw-bold align-center">Send some friend requests, or accept incoming friend requests!</h2>
 {% endif %}
 {% endblock %}

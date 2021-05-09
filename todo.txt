@@ -9,10 +9,8 @@ add cake background image
 GET CAKE LOGO (or cite one) (OR REPLACE THE BIRTHDAY MEET TEXT WITH AN IMAGE)
 
 format:
-    friends
     index
     messages
-    requests
     send
     sent
 for messages, send, sent (be sure in say that you can only send messages/receive messages from your friends)
