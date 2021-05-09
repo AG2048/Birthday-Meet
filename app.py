@@ -361,8 +361,6 @@ def explore():
                 if list is empty display diff messages
             error
     """
-    error = None
-
     if request.method == "POST":
         receiver_id = request.form.get("receiver_id")
         # Verify if receiver_id exixts AND is not user himself
@@ -402,16 +400,16 @@ def explore():
                             return redirect("/explore")
                     else:
                         # User have already sent a request to receiver
-                        error = "You have already sent a request"
+                        flash("Error: You have already sent a request")
                 else:
                     # User and receiver are already linked in friends list
-                    error = "User is already a friend"
+                    flash("Error: User is already a friend")
             else:
                 # User does not have same birthday as receiver
-                error = "Invalid friend request"
+                flash("Error: Invalid friend request")
         else:
             # receiver_id doesnt exist, receiver is user him/herself, or receiver doesn't exist in users list
-            error = "Invalid friend request"
+            flash("Error: Invalid friend request")
 
     list_of_potential_friends = []
     current_user_info = db.execute("SELECT * FROM users WHERE id = ?", session.get("user_id"))[0]
@@ -433,7 +431,7 @@ def explore():
             "id": user_with_same_birthday.get("id")
         })
     list_of_potential_friends.sort(key = lambda l: l["username"])
-    return render_template("explore.html", error=error, list_of_potential_friends=list_of_potential_friends)
+    return render_template("explore.html", list_of_potential_friends=list_of_potential_friends)
 
 
 @app.route("/requests", methods=["GET", "POST"])
@@ -472,7 +470,6 @@ def requests():
             request_id
             accept or not (accepts: true or false)
     """
-    error = None
     if request.method == "POST":
         request_id = request.form.get("request_id")
         accepts = request.form.get("accepts")
@@ -499,22 +496,22 @@ def requests():
                         return redirect("/requests")
                     else:
                         # Error here, accepts is not true nor false
-                        error = "Invalid action"
+                        flash("Error: Invalid action")
                 else:
                     # this request is not directed at user
-                    error = "Invalid friend request"
+                    flash("Error: Invalid friend request"
             else:
                 # request doesn't exist in requests table
-                error = "Invalid friend request"
+                flash("Error: Invalid friend request"
         else:
             # There are no request_id passed on, or "accepts" is not passed. MISSING INFORMATION
-            error = "Invalid input"
+            flash("Error: Invalid input"
     # Get data of all requests directed to this person from database, then render
     list_of_all_requests = db.execute("SELECT * FROM requests WHERE receiver_id = ?", session.get("user_id"))
     for every_request in list_of_all_requests:
         every_request["sender_username"] = db.execute("SELECT * FROM users WHERE id = ?", every_request["sender_id"])[0]["username"]
     list_of_all_requests.reverse()
-    return render_template("requests.html", error=error, list_of_all_requests=list_of_all_requests)
+    return render_template("requests.html", list_of_all_requests=list_of_all_requests)
 
 
 @app.route("/messages", methods=["GET", "POST"])
@@ -533,8 +530,6 @@ def messages():
             (list_of_messages_info =>message, id, sender_username, time_sent, is_read)
         post: app.py receives the id of the message to "mark as read" (message_id)
     """
-    error = None
-
     if request.method == "POST":
         id_of_message_to_mark = request.form.get("message_id")
         if id_of_message_to_mark:
@@ -549,13 +544,13 @@ def messages():
                     return redirect("/messages")
                 else:
                     # message is already read...
-                    error = "Message is already marked as read"
+                    flash("Error: Message is already marked as read"
             else:
                 # message doesn't exist, or message is not directed at current user (both will cause len() 0 from SELECT)
-                error = "Invalid message"
+                flash("Error: Invalid message"
         else:
             # Id isn't returned or id is not a number
-            error = "Invalid input"
+            flash("Error: Invalid input"
     # Init a list to return later
     list_of_messages_info = []
     # Get necessary info
@@ -574,7 +569,7 @@ def messages():
         })
     # Reverse so newest comes first
     list_of_messages_info.reverse()
-    return render_template("messages.html", list_of_messages_info=list_of_messages_info, error=error)
+    return render_template("messages.html", list_of_messages_info=list_of_messages_info)
 
 
 @app.route("/friends")
