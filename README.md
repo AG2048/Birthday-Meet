@@ -119,3 +119,8 @@ This database file stores the following tables:
   - sender_id *Integer, id of the user who sent the message*
   - message_text *Text, message itself*
   - when_sent *Date, date of when the message is sent*
+
+##### BirthdayMeetText.png:
+Picture of a fancy "Birthday Meet" text. Used in the navigation bar.
+##### logo.png:
+A picture containing the letters "B", "M" and the candle and egg in the "Birthday Meet" text. Used in home page and webpage icon.
