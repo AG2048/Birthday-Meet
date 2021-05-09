@@ -3,7 +3,7 @@
 #### Description:
 
 ##### Home Page:
-In the home page, the user will be seeing a brief description of this website and the logo, along with two buttons to register and log in.
+In the home page, the user will be seeing a brief description of this website and the logo, along with two buttons to [Register](#Register) and [Log in](#Log in).
 ##### Overview:
 ##### Explore:
 ##### Requests:
@@ -13,4 +13,4 @@ In the home page, the user will be seeing a brief description of this website an
 ##### Send:
 ##### Contact Us:
 ##### Register:
-##### Login:
+##### Log in:
