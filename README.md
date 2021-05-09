@@ -90,6 +90,8 @@ This is the core file of the entire website.
 
 The main functionality of this file is to respond to every GET request and POST request. For every POST request, the code also verifies if the request is "legal" and doesn't break the website (such as sending request to a non-existing user, accepting request from a user with different birthday, sending messages to another user who's not a friend, etc.). At the same time, the code stores information into [birthday-meet.db](#birthday-meetdb)
 
+This code also sends "flash()" messages and error messages to the HTML files.
+
 ##### birthday-meet.db:
 This database file stores the following tables:
 - users *A table that stores all the users' info*
