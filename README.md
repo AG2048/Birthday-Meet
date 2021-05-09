@@ -5,6 +5,8 @@ Have you ever had the thought of meeting someone who shares your birthday, but i
 
 Well, Birthday Meet is the solution to that problem! With this online social platform, you can easily find other people who share your birthday and send message to them to make new friends!
 
+This website uses flask.
+
 ##### Home Page:
 `href="/"` `index.html`
 
@@ -77,3 +79,41 @@ This page also includes two buttons to direct users to [Send](#Send) and [Messag
 `ref="/contact"` after log in `contact.html`
 
 This page allows user to send a message to the developers of the website, which can only be read by accessing the database file.
+
+#### Non-HTML Files:
+##### styles.css:
+A file that includes certain classes not included in the bootstrap library
+##### app.py:
+This is the core file of the entire website. 
+
+The main functionality of this file is to respond to every GET request and POST request. For every POST request, the code also verifies if the request is "legal" and doesn't break the website (such as sending request to a non-existing user, accepting request from a user with different birthday, sending messages to another user who's not a friend, etc.). At the same time, the code stores information into [birthday-meet.db](#birthday-meet.db)
+
+##### birthday-meet.db:
+This database file stores the following tables:
+- users
+  - id
+  - username
+  - hash
+  - month
+  - day
+- requests
+  - id
+  - sender_id
+  - receiver_id
+  - request_message
+  - when_sent
+- friends
+  - user_1_id
+  - user_2_id
+- messages
+  - id
+  - sender_id
+  - receiver_id
+  - message_text
+  - when_sent
+  - is_read
+- contact_messages
+  - id
+  - sender_id
+  - message_text
+  - when_sent
