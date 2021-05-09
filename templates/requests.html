@@ -21,14 +21,16 @@
 <h1 class="display-5 fw-bold">Requests</h1>
 <hr>
 {% if list_of_all_requests %}
+    <h2 class="display-5 align-center">New friend requests:</h2>
+    <h4 class="display-5 fw-bold align-center">Click "Accept" to add this user to your friend list!</h2>
     {% for request in list_of_all_requests %}
         <div class="form-group">
             <form action="/requests" method="post">
-                <p class="lead">
-                    Sender Username: {{ request.sender_username }}
-                </p>
-                <p class="lead">
-                    MESSAGE: {{ request.request_message }}
+                <h4 class="display-5">
+                    From: {{ request.sender_username }}
+                </h4>
+                <p>
+                    "{{ request.request_message }}"
                 </p>
                 <input type="hidden" name="request_id" value="{{ request.id }}">
                 <button class="btn btn-primary" type="submit" name="accepts" value="true">Accept</button>
@@ -37,6 +39,7 @@
         </div>
     {% endfor %}
 {% else %}
-    NO REQUESTS LMAO
+    <h2 class="display-5 fw-bold align-center">You have no new friend requests at this moment</h2>
+    <h4 class="display-5 fw-bold align-center">Send some friend requests, or if you know someone that shares your birthday, get them to join Birthday Meet!</h2>
 {% endif %}
 {% endblock %}

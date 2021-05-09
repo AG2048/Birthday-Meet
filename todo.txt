@@ -15,3 +15,4 @@ format:
     requests
     send
     sent
+for messages, send, sent (be sure in say that you can only send messages/receive messages from your friends)
