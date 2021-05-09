@@ -644,11 +644,11 @@ def send():
     error_message = None
 
     if request.method == "POST":
-        receiver_id = method.form.get("receiver_id")
+        receiver_id = request.form.get("receiver_id")
         if receiver_id:
             # Check if the receiver is a friend
             if len(db.execute("SELECT * FROM friends WHERE (user_1_id = ? AND user_2_id = ?) OR (user_2_id = ? AND user_1_id = ?)", receiver_id, session.get("user_id"), receiver_id, session.get("user_id"))) >= 1:
-                message_text = method.form.get("message_text")
+                message_text = request.form.get("message_text")
                 if message_text:
                     # Add message to db, and redirect with flash
                     now = datetime.now().strftime("%Y-%m-%d")
