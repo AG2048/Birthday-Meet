@@ -63,3 +63,7 @@ footer {
     overflow: hidden;
     margin-top: -6px;
 }
+
+.align-center{
+    text-align: center;
+}
