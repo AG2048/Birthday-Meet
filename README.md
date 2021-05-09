@@ -80,6 +80,8 @@ This page also includes two buttons to direct users to [Send](#Send) and [Messag
 
 This page allows user to send a message to the developers of the website, which can only be read by accessing the database file.
 
+Only 1 message is allowed per day per user to prevent spam.
+
 #### Non-HTML Files:
 ##### styles.css:
 A file that includes certain classes not included in the bootstrap library
@@ -107,13 +109,13 @@ This database file stores the following tables:
   - user_2_id *Integer*
 - messages *A table of messages sent between users*
   - id *Integer, id of the message*
-  - sender_id
-  - receiver_id
-  - message_text
-  - when_sent
-  - is_read
-- contact_messages
-  - id
-  - sender_id
-  - message_text
-  - when_sent
+  - sender_id *Integer, id of the user who sent this message*
+  - receiver_id *Integer, id of the user who is receiving this message*
+  - message_text *Text, the text of the message*
+  - when_sent *Date, the date of when the message's sent*
+  - is_read *Bit, 0 for unread message, 1 for read message*
+- contact_messages *A table of messages sent to the website's creator*
+  - id *Integer, id of the message*
+  - sender_id *Integer, id of the user who sent the message*
+  - message_text *Text, message itself*
+  - when_sent *Date, date of when the message is sent*
