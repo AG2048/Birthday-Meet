@@ -569,7 +569,7 @@ def messages():
         # This turns the BIT into True/False
         is_read = (message_from_database["is_read"] == 1)
         list_of_messages_info.append({
-            "message": message_from_database["message_text"],
+            "message": message_from_database["message_text"].split("\r\n"),
             "id": message_from_database["id"],
             "sender_username": sender_username,
             "time_sent": message_from_database["when_sent"],
@@ -613,7 +613,7 @@ def sent():
         # This turns the BIT into True/False
         is_read = (message_from_database["is_read"] == 1)
         list_of_messages_info.append({
-            "message": message_from_database["message_text"],
+            "message": message_from_database["message_text"].split("\r\n"),
             "id": message_from_database["id"],
             "receiver_username": receiver_username,
             "time_sent": message_from_database["when_sent"],
