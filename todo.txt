@@ -6,4 +6,13 @@ check diff button types - match each for each page
 
 add cake background image
 
-GET CAKE LOGO (or cite one)
+GET CAKE LOGO (or cite one) (OR REPLACE THE BIRTHDAY MEET TEXT WITH AN IMAGE)
+
+format:
+    contact
+    friends
+    index
+    messages
+    requests
+    send
+    sent
